@@ -12,7 +12,7 @@ package main
 	end while
 */
 
-func insertionSort(arr []int, n int) {
+func insertionSort(arr []int) []int {
 	for i := 1; i <= len(arr)-1; i++ {
 		key := arr[i]
 		j := 0
@@ -26,4 +26,6 @@ func insertionSort(arr []int, n int) {
 
 		arr[j-1] = key
 	}
+
+	return arr
 }
