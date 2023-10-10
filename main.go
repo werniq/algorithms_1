@@ -34,6 +34,13 @@ func compareAlgorithms() {
 	fmt.Println("Duration of insertion sort algorithm: ", insertionSortDurationTime)
 	fmt.Println(arr2)
 
+	heapSortStartTime := time.Now()
+	arr3 := heapSort(testCase)
+
+	heapSortDurationTime := time.Now().Sub(heapSortStartTime)
+	fmt.Println("Duration of heap sort algorithm: ", heapSortDurationTime)
+	fmt.Println(arr3)
+
 }
 
 func main() {
