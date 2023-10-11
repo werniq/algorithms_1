@@ -13,18 +13,17 @@ package main
 */
 
 func insertionSort(arr []int) []int {
-	for i := 1; i <= len(arr)-1; i++ {
+	for i := 1; i < len(arr); i++ {
 		key := arr[i]
-		j := 0
+		j := i - 1
 
-		// we are moving all elements bigger than key
-		// one position forward
-		for j = i; j > 0 && arr[j-1] > key; j = j {
-			arr[j-1] = arr[j]
-			j = j - 1
+		// Shift elements of arr[0..i-1] that are greater than key
+		for j >= 0 && arr[j] > key {
+			arr[j+1] = arr[j]
+			j--
 		}
 
-		arr[j-1] = key
+		arr[j+1] = key
 	}
 
 	return arr

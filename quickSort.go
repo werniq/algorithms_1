@@ -3,17 +3,17 @@ package main
 func partition(arr []int, start, end int) ([]int, int) {
 	pivot := arr[end]
 
-	i := start
-	for j, v := range arr {
-		if v < pivot {
-			arr[i], arr[j] = arr[j], arr[i]
+	i := start - 1
+	for j := start; j < end; j++ {
+		if arr[j] < pivot {
 			i++
+			arr[i], arr[j] = arr[j], arr[i]
 		}
 	}
 
-	arr[i], arr[end] = arr[end], arr[i]
+	arr[i+1], arr[end] = arr[end], arr[i+1]
 
-	return arr, i
+	return arr, i + 1
 }
 
 func quickSort(arr []int, leftBound, rightBound int) []int {
