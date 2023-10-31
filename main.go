@@ -8,7 +8,7 @@ import (
 
 const (
 	Limit              = 591257512
-	ElementLimit       = 10000000
+	ElementLimit       = 1000
 	ResultsArrayLength = 10
 )
 
@@ -24,17 +24,19 @@ func calculateAverageFromArray(arr []int64) int {
 	return sum / count
 }
 
-func calculateAverageOfQuickSortAlgorithm() int {
+type srt func([]int) []int
+
+func calc(fn srt, s int) int {
 	results := []int64{}
 
 	for i := 0; i < ResultsArrayLength; i++ {
-		arr := generateRandomIntArray()
+		arr := generateRandomIntArray(s)
 
-		startTime := time.Now().UnixMilli()
+		startTime := time.Now().UnixNano()
 
-		arr = quickSort(arr, 0, len(arr)-1)
+		arr = fn(arr)
 
-		duration := time.Now().UnixMilli() - startTime
+		duration := time.Now().UnixNano() - startTime
 
 		results = append(results, duration)
 	}
@@ -42,63 +44,9 @@ func calculateAverageOfQuickSortAlgorithm() int {
 	return calculateAverageFromArray(results)
 }
 
-func calculateAverageOfHeapSortAlgorithm() int {
-	results := []int64{}
-
-	for i := 0; i < ResultsArrayLength; i++ {
-		arr := generateRandomIntArray()
-
-		startTime := time.Now().UnixMilli()
-
-		arr = heapSort(arr)
-
-		duration := time.Now().UnixMilli() - startTime
-
-		results = append(results, duration)
-	}
-
-	return calculateAverageFromArray(results)
-}
-
-func calculateAverageOfInsertionSortAlgorithm() int {
-	results := []int64{}
-
-	for i := 0; i < ResultsArrayLength; i++ {
-		arr := generateRandomIntArray()
-
-		startTime := time.Now().UnixMilli()
-
-		arr = insertionSort(arr)
-
-		duration := time.Now().UnixMilli() - startTime
-
-		results = append(results, duration)
-	}
-
-	return calculateAverageFromArray(results)
-}
-
-func calculateAverageOfRadixSortAlgorithm() int {
-	results := []int64{}
-
-	for i := 0; i < ResultsArrayLength; i++ {
-		arr := generateRandomIntArray()
-
-		startTime := time.Now().UnixMilli()
-
-		arr = sortRadix(arr)
-
-		duration := time.Now().UnixMilli() - startTime
-
-		results = append(results, duration)
-	}
-
-	return calculateAverageFromArray(results)
-}
-
-func generateRandomIntArray() []int {
+func generateRandomIntArray(s int) []int {
 	arr := []int{}
-	for i := 0; i < ElementLimit; i++ {
+	for i := 0; i < s; i++ {
 		arr = append(arr, rand.Intn(Limit))
 	}
 
@@ -106,31 +54,29 @@ func generateRandomIntArray() []int {
 }
 
 func compareAlgorithms() {
-	var testCase []int
+	fmt.Printf(`S Q I R H
+`)
 
-	for i := 0; i < ElementLimit; i++ {
-		testCase = append(testCase, rand.Intn(Limit))
+	for p := 10; p <= 10000; p *= 10 {
+		for d := 1; d < 10; d++ {
+			s := d * p
+
+			avQuickSortTime := calc(func(arr []int) []int { return quickSort(arr, 0, s-1) }, s)
+			avInstSortTime := calc(insertionSort, s)
+			avRadixSortTime := calc(sortRadix, s)
+			avHeapSortTime := calc(heapSort, s)
+
+			fmt.Printf(`%d %d %d %d %d
+`,
+				s,
+				avQuickSortTime,
+				avInstSortTime,
+				avRadixSortTime,
+				avHeapSortTime,
+			)
+		}
 	}
 
-	avQuickSortTime := calculateAverageOfQuickSortAlgorithm()
-	avRadixSortTime := calculateAverageOfRadixSortAlgorithm()
-	avHeapSortTime := calculateAverageOfHeapSortAlgorithm()
-	avInstSortTime := calculateAverageOfInsertionSortAlgorithm()
-
-	fmt.Printf(`
-			Average amount of time, was needed to sort 100 arrays of %d elements (in milliseconds):
-			Quick sort: %d
-			Insertion sort: %d
-			Radix sort: %d
-			Heap sort: %d
-		
-		`,
-		ElementLimit,
-		avQuickSortTime,
-		avInstSortTime,
-		avRadixSortTime,
-		avHeapSortTime,
-	)
 }
 
 func main() {
