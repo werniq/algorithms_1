@@ -126,16 +126,8 @@ Each array size was tested 10-100 times.
 <p style="font-size: 18px">
 Graphics and results for the average case of all sorting algorithms are listed
 below. Values have been taken as average from 10 results.
+<br>
 </p>
-
-| Elements Count | Quick sort | Heap sort | Radix sort | Insertion sort |
-|----------------|------------|-----------|------------| -------------- |
-| 1000000        | 96         | 239       | 492        | 271449         |
-| 500000         | 14         | 112       | 242        | 67225          |
-| 150000         | 9          | 28        | 78         | 5306           |
-| 100000         | 7          | 19        | 38         | 2209           |
-| 50000          | 5          | 10        | 24         | 568            |
-| 15000          | 3          | 4         | 12         | 153            |
 <hr>
 
 <p style="font-size: 18px">
@@ -149,15 +141,16 @@ Heap, and Radix sort comparison.
 From graph below we can see that Insertion sort is slower than each of these sorts at least in 500 times.
 </p>
 
-<img style="margin-left: 10%" src="chart.png" alt="chart-2" />
+<img style="margin-left: 10%" src="chart-3.png" alt="chart-2" />
 <br> 
 
 <p style="font-size: 18px">
-From graph below, we can see that quick sort is at least 3x times faster
-then radix based on this data, and at least twice faster than heap sort. <br>
+From graph below, we can see that quick sort average time is nearly the same as in heap sort.
+Radix sort, however, takes a lot more time compared to quick and heap.
+<br>
 </p>
 
-<img style="margin-left: 10%" src="chart (1).png" alt="chart-2" />
+<img style="margin-left: 10%" src="chart-2.png" alt="chart-2" />
 
 # Conclusion
 <p style="font-size: 18px">

@@ -1,54 +1,67 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
+	"encoding/binary"
+	"encoding/json"
 	"strconv"
 )
 
 func sortRadix(arr []int) []int {
+	step := 0
+
 	m := max(arr)
-	step := 1
 	for i := 1; m/i > 0; i *= 10 {
+		convertToBytesWithBuffer(arr, step)
 		step++
 	}
-
-	radixSort(arr, step)
 
 	return arr
 }
 
-func radixSort(arr []int, step int) {
-	var strArr []string
+func convertToBytesWithBuffer(arr []int, radix int) {
+	var res [][]byte
 
-	// Convert integers to fixed-length strings for comparison
+	buff := new(bytes.Buffer)
+
 	for _, v := range arr {
-		str := fmt.Sprintf("%0*d", step, v)
-		strArr = append(strArr, str)
+		_ = binary.Write(buff, binary.LittleEndian, v)
+		res = append(res, buff.Bytes())
 	}
 
-	for i := step - 1; i >= 0; i-- {
-		findBiggestNumberByPosition(strArr, i)
-	}
-
-	// Convert the sorted strings back to integers
-	for i, str := range strArr {
-		num, _ := strconv.Atoi(str)
-		arr[i] = num
-	}
+	sortByRadix(res, radix)
 }
 
-func findBiggestNumberByPosition(arr []string, pos int) {
-	for i := 0; i < len(arr)-1; i++ {
-		if len(arr[i]) <= pos || len(arr[i+1]) <= pos {
-			// Handle strings with different lengths
-			if len(arr[i]) < len(arr[i+1]) {
-				arr[i], arr[i+1] = arr[i+1], arr[i]
-			}
-			continue
-		}
+func convertToBytesFromString(arr []int, radix int) {
+	var res [][]byte
 
-		if arr[i][pos] > arr[i+1][pos] {
-			arr[i], arr[i+1] = arr[i+1], arr[i]
+	for i := 0; i < len(arr); i++ {
+		res = append(res, []byte(strconv.Itoa(arr[i])))
+	}
+
+	sortByRadix(res, radix)
+}
+
+func convertToBytesWithMarshalling(arr []int, radix int) {
+	var res [][]byte
+
+	for _, v := range arr {
+		out, _ := json.Marshal(v)
+		res = append(res, out)
+	}
+
+	sortByRadix(res, radix)
+}
+
+func sortByRadix(res [][]byte, radix int) {
+	for i := 0; i < len(res)-1; i++ {
+		if len(res[i]) <= radix || len(res[i+1]) <= radix {
+			if len(res[i]) > len(res[i+1]) {
+				res[i], res[i+1] = res[i+1], res[i]
+			}
+			if len(res[i]) > radix && len(res[i+1]) > radix && res[i][radix] > res[i+1][radix] {
+				res[i], res[i+1] = res[i+1], res[i]
+			}
 		}
 	}
 }
